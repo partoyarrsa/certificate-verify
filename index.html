@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تأیید اصالت گواهی | Certificate Verification | دانشگاه علوم پزشکی سبزوار</title>
+  <style>
+    :root {
+      --cream: #FAF8F1;
+      --navy: #16294F;
+      --gold: #C8A24A;
+      --gold-dark: #A8842F;
+      --success: #1B7A4E;
+      --danger: #B33A3A;
+      --gray: #5A6577;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", Tahoma, "Vazirmatn", "IRANSans", Arial, sans-serif;
+      background: linear-gradient(160deg, #f5f1e8 0%, #e8e2d4 100%);
+      min-height: 100vh;
+      color: var(--navy);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 640px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+    .card {
+      background: var(--cream);
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(22, 41, 79, 0.12);
+      border: 2px solid var(--gold);
+      overflow: hidden;
+    }
+    .header {
+      background: var(--navy);
+      color: white;
+      padding: 28px 24px;
+      text-align: center;
+      position: relative;
+    }
+    .header::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
+    }
+    .header h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .header .en {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      font-weight: 400;
+    }
+    .uni {
+      font-size: 0.85rem;
+      margin-top: 10px;
+      opacity: 0.9;
+    }
+    .body {
+      padding: 28px 24px 32px;
+    }
+    .status-box {
+      text-align: center;
+      padding: 24px 16px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      display: none;
+    }
+    .status-box.valid {
+      background: #e8f5ee;
+      border: 2px solid var(--success);
+      display: block;
+    }
+    .status-box.invalid {
+      background: #fceaea;
+      border: 2px solid var(--danger);
+      display: block;
+    }
+    .status-box.loading {
+      background: #f0f2f5;
+      border: 2px solid #ccc;
+      display: block;
+    }
+    .status-icon {
+      font-size: 3rem;
+      margin-bottom: 8px;
+    }
+    .status-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .status-title.valid { color: var(--success); }
+    .status-title.invalid { color: var(--danger); }
+    .details {
+      background: white;
+      border-radius: 10px;
+      padding: 18px 20px;
+      border: 1px solid #e0dcd3;
+      display: none;
+    }
+    .details.show { display: block; }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px dashed #e5e0d6;
+      gap: 12px;
+    }
+    .row:last-child { border-bottom: none; }
+    .label {
+      color: var(--gray);
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .value {
+      font-weight: 600;
+      text-align: left;
+      direction: ltr;
+      word-break: break-word;
+    }
+    .value.fa {
+      direction: rtl;
+      text-align: right;
+    }
+    .input-section {
+      margin-top: 8px;
+    }
+    .input-section label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .input-group {
+      display: flex;
+      gap: 8px;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 12px 14px;
+      border: 2px solid #d4cfc3;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: white;
+      color: var(--navy);
+      direction: ltr;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    button {
+      background: var(--navy);
+      color: white;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    button:hover { background: #1e3a6e; }
+    .footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 0.8rem;
+      color: var(--gray);
+      border-top: 1px solid #e8e2d4;
+    }
+    .hint {
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-top: 12px;
+      text-align: center;
+    }
+    @media (max-width: 480px) {
+      .container { margin: 16px auto; }
+      .header h1 { font-size: 1.15rem; }
+      .input-group { flex-direction: column; }
+      button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <h1>تأیید اصالت گواهی</h1>
+        <div class="en">Certificate Authenticity Verification</div>
+        <div class="uni">دانشگاه علوم پزشکی سبزوار · Sabzevar University of Medical Sciences</div>
+      </div>
+
+      <div class="body">
+        <!-- Status messages -->
+        <div id="statusLoading" class="status-box loading">
+          <div class="status-icon">⏳</div>
+          <div class="status-title">در حال بررسی...</div>
+          <div>Checking certificate...</div>
+        </div>
+
+        <div id="statusValid" class="status-box valid">
+          <div class="status-icon">✅</div>
+          <div class="status-title valid">گواهی معتبر است</div>
+          <div>This certificate is authentic</div>
+        </div>
+
+        <div id="statusInvalid" class="status-box invalid">
+          <div class="status-icon">❌</div>
+          <div class="status-title invalid">گواهی یافت نشد / نامعتبر</div>
+          <div>Certificate not found or invalid</div>
+        </div>
+
+        <!-- Details when valid -->
+        <div id="details" class="details">
+          <div class="row">
+            <span class="label">کد تأیید / Code</span>
+            <span class="value" id="d-code">—</span>
+          </div>
+          <div class="row">
+            <span class="label">نام شرکت‌کننده / Name</span>
+            <span class="value fa" id="d-name">—</span>
+          </div>
+          <div class="row">
+            <span class="label">دوره / Course</span>
+            <span class="value fa" id="d-course">—</span>
+          </div>
+          <div class="row">
+            <span class="label">تاریخ صدور / Issue Date</span>
+            <span class="value" id="d-date">—</span>
+          </div>
+          <div class="row">
+            <span class="label">ساعت دوره / Hours</span>
+            <span class="value" id="d-hours">—</span>
+          </div>
+          <div class="row">
+            <span class="label">صادرکننده / Issuer</span>
+            <span class="value fa" id="d-issuer">مرکز مطالعات و توسعه آموزش پزشکی</span>
+          </div>
+        </div>
+
+        <!-- Manual input -->
+        <div class="input-section">
+          <label for="codeInput">کد تأیید را وارد کنید / Enter verification code</label>
+          <div class="input-group">
+            <input type="text" id="codeInput" placeholder="SUMS-AI-2026-XXXX" autocomplete="off" />
+            <button type="button" onclick="verify()">بررسی / Verify</button>
+          </div>
+          <p class="hint">یا کد را از QR اسکن‌شده وارد کنید</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        Medical Education Development Committee · Sabzevar University of Medical Sciences<br>
+        این صفحه فقط برای تأیید اصالت گواهی‌های صادرشده توسط این مرکز است.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // دیتابیس نمونه (برای دمو)
+    // در نسخه واقعی این لیست را از Google Sheet یا سرور بخوانید
+    // ============================================
+    const CERTIFICATES = {
+      "SUMS-AI-2026-0001": {
+        name: "علی رضایی",
+        course: "AI Tools Familiarization Summer School",
+        date: "۱۴۰۵/۰۶/۲۳ · September 14, 2026",
+        hours: "۸ ساعت (هر جلسه ۲ ساعت)",
+        issuer: "مرکز مطالعات و توسعه آموزش پزشکی"
+      },
+      "SUMS-AI-2026-0002": {
+        name: "مریم حسینی",
+        course: "AI Tools Familiarization Summer School",
+        date: "۱۴۰۵/۰۶/۲۳ · September 14, 2026",
+        hours: "۸ ساعت (هر جلسه ۲ ساعت)",
+        issuer: "مرکز مطالعات و توسعه آموزش پزشکی"
+      },
+      "SUMS-AI-2026-DEMO": {
+        name: "نمونه آزمایشی / Demo Participant",
+        course: "AI Tools Familiarization Summer School",
+        date: "۱۴۰۵/۰۶/۲۳ · September 14, 2026",
+        hours: "۸ ساعت",
+        issuer: "مرکز مطالعات و توسعه آموزش پزشکی"
+      }
+    };
+
+    function hideAll() {
+      document.getElementById("statusLoading").style.display = "none";
+      document.getElementById("statusValid").style.display = "none";
+      document.getElementById("statusInvalid").style.display = "none";
+      document.getElementById("details").classList.remove("show");
+    }
+
+    function verify(codeFromUrl) {
+      hideAll();
+      const input = document.getElementById("codeInput");
+      let code = (codeFromUrl || input.value || "").trim().toUpperCase();
+
+      if (!code) {
+        alert("لطفاً کد تأیید را وارد کنید");
+        return;
+      }
+
+      // Normalize
+      code = code.replace(/\s+/g, "");
+      input.value = code;
+
+      document.getElementById("statusLoading").style.display = "block";
+
+      // Simulate network delay (remove in production if using real API)
+      setTimeout(() => {
+        const cert = CERTIFICATES[code];
+        hideAll();
+
+        if (cert) {
+          document.getElementById("statusValid").style.display = "block";
+          document.getElementById("d-code").textContent = code;
+          document.getElementById("d-name").textContent = cert.name;
+          document.getElementById("d-course").textContent = cert.course;
+          document.getElementById("d-date").textContent = cert.date;
+          document.getElementById("d-hours").textContent = cert.hours;
+          document.getElementById("d-issuer").textContent = cert.issuer;
+          document.getElementById("details").classList.add("show");
+        } else {
+          document.getElementById("statusInvalid").style.display = "block";
+        }
+      }, 400);
+    }
+
+    // Auto-verify if code is in URL
+    window.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("code") || params.get("id") || params.get("c");
+      if (code) {
+        document.getElementById("codeInput").value = code;
+        verify(code);
+      }
+    });
+
+    // Enter key
+    document.getElementById("codeInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") verify();
+    });
+  </script>
+</body>
+</html>
